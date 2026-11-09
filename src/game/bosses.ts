@@ -81,10 +81,10 @@ export const BOSSES: Record<BossId, BossDef> = {
       {
         until: 0.66,
         step(b, w, ev) {
-          if (ev.pos === 0 || ev.pos === 8) aimed(w, b.x, b.y - 2, 5, 50 * DEG, 22, { size: 'm', c: BC.A });
+          if (ev.pos === 0 || ev.pos === 8) aimed(w, b.x, b.y - 2, 3, 36 * DEG, 20, { size: 'm', c: BC.A });
           if (ev.pos === 4 || ev.pos === 12) {
             b.u0 += 0.17;
-            ring(w, b.x, b.y, 18, 16, b.u0, { size: 's', c: BC.B });
+            ring(w, b.x, b.y, 14, 15, b.u0, { size: 's', c: BC.B });
           }
           if (ev.pos === 0 && ev.bar % 2 === 0) target(b, w.rng.range(-14, 14), w.rng.range(26, 34));
         },
@@ -112,9 +112,9 @@ export const BOSSES: Record<BossId, BossDef> = {
           if (ev.pos % 4 === 0) {
             b.u0 += 0.13;
             const s = ev.beat % 2 === 0 ? 1 : -1;
-            ring(w, b.x, b.y, 22, 17, b.u0, { size: 's', c: BC.C, angv: 0.35 * s });
+            ring(w, b.x, b.y, 18, 16, b.u0, { size: 's', c: BC.C, angv: 0.35 * s });
           }
-          if (ev.pos === 6 || ev.pos === 14) aimed(w, b.x, b.y, 3, 16 * DEG, 30, { shape: Shape.Rice, c: BC.A });
+          if (ev.pos === 6 || ev.pos === 14) aimed(w, b.x, b.y, 3, 16 * DEG, 26, { shape: Shape.Rice, c: BC.A });
           if (ev.pos === 0 && ev.bar % 2 === 0) target(b, w.rng.range(-10, 10), w.rng.range(28, 33));
         },
         update(b, _w, dt) {

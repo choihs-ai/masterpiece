@@ -21,6 +21,7 @@ import { World } from './game/world';
 import { Input } from './input/input';
 import { GameRenderer } from './render/renderer';
 import { dailyShip, UI, type ResultsData } from './ui/ui';
+import { Online } from './online';
 
 const save = loadSave();
 setLang(save.settings.lang);
@@ -130,6 +131,10 @@ const ui = new UI(uiRoot, save, {
   sound: (k) => engine.ui(k),
 });
 ui.dailyKey = todayKey();
+const online = new Online();
+ui.online = online;
+online.onChange = () => ui.refreshRecords();
+void online.init();
 ui.refresh();
 ui.show('title');
 
@@ -303,6 +308,7 @@ function finishRun(win: boolean): void {
   save.history.unshift({ score, sector: st.sector, diff, ship: runConfig.ship, date: todayKey(), win, daily: runConfig.daily });
   save.history = save.history.slice(0, 20);
   writeSave(save);
+  if (!runConfig.daily) void online.submit(score, runConfig.ship, diff, win);
   const data: ResultsData = {
     win,
     score,

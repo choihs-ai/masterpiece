@@ -7,6 +7,7 @@ import { DIFFICULTY, SECTORS, SHIP_ORDER, SHIPS } from '../game/sectors';
 import { describe, UPGRADE_MAP, type UpgradeId } from '../game/upgrades';
 import type { World } from '../game/world';
 import { iconSvg, LOGO_SVG, PAUSE_SVG, SHIP_SVG } from './icons';
+import type { Online } from '../online';
 
 export interface UIHandlers {
   firstTap(): void;
@@ -93,6 +94,7 @@ export class UI {
     sector: HTMLElement;
   };
   dailyKey = '';
+  online: Online | null = null;
 
   constructor(
     root: HTMLElement,
@@ -528,12 +530,32 @@ export class UI {
             <div><span>${t('rec.perfects')}</span><b>${fmt(sv.stats.perfectPulses)}</b></div>
             <div><span>${t('rec.time')}</span><b>${fmtTime(sv.stats.playTime)}</b></div>
           </div>
+          ${this.onlineHtml()}
           <div class="eyebrow">${t('rec.history')}</div>
           <div class="history">${hist || `<p class="hint">${t('rec.empty')}</p>`}</div>
           <div class="row"><button class="btn" data-act="back" data-autofocus>${t('back')}</button></div>
         </div>
       </div>`;
     this.bind(s);
+  }
+
+  private onlineHtml(): string {
+    const o = this.online;
+    if (!o || !o.available) return '';
+    const rows = o.rows
+      .map((r, i) => {
+        const name = r.me ? t('you') : r.name || t('someone');
+        const span = document.createElement('span');
+        span.textContent = name;
+        return `<div${r.me ? ' style="color:var(--accent)"' : ''}><span class="meta">${i + 1}. ${span.innerHTML} · ${t(`ship.${r.ship}`)} · ${t(`diff.${r.diff}`)}${r.win ? ' ★' : ''}</span><span></span><b>${fmt(r.best)}</b></div>`;
+      })
+      .join('');
+    return `<div class="eyebrow">${t('rec.online')}</div><div class="history">${rows || `<p class="hint">${t('rec.onlineEmpty')}</p>`}</div>`;
+  }
+
+  /** Re-render records if open (leaderboard updates live). */
+  refreshRecords(): void {
+    if (this.active === 'records') this.renderRecords();
   }
 
   private renderHelp(): void {

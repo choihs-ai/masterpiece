@@ -72,7 +72,7 @@ export class SfxDirector {
         eng.arpeggio(now + 0.05, chord, 8, 0.045, 1);
         break;
       case 'graze':
-        eng.graze(now, chord[(this.pluckIdx + 1) % chord.length] + 36);
+        eng.graze(now, Math.min(100, chord[(this.pluckIdx + 1) % chord.length] + 24));
         break;
       case 'pickup': {
         if (e.kind === 'heart') {
