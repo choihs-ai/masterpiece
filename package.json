@@ -1,0 +1,23 @@
+{
+  "name": "pulsar",
+  "private": true,
+  "version": "1.0.0",
+  "description": "PULSAR — a music-synced neon bullet-hell roguelite for the browser",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "build:single": "vite build --mode single && node scripts/make-artifact.mjs",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/three": "0.184.0",
+    "three": "0.184.0",
+    "typescript": "5.9.3",
+    "vite": "6.4.5",
+    "vite-plugin-singlefile": "2.3.4",
+    "vitest": "3.2.7"
+  }
+}
