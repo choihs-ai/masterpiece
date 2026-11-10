@@ -3,9 +3,7 @@ import { RNG, hashString } from '../src/core/rng';
 import { Scale, voiceLead } from '../src/audio/theory';
 import { Song, STYLES, makeSong, parseRhythm, type StyleId } from '../src/audio/composer';
 import { Conductor, type StepEvent } from '../src/audio/conductor';
-import { computeStats, rollOffers, UPGRADES, UPGRADE_MAP, describe as describeUp } from '../src/game/upgrades';
-import { DIFFICULTY, SECTORS, SHIPS } from '../src/game/sectors';
-import { buildWave } from '../src/game/waves';
+import { STAGES } from '../src/game/content';
 
 describe('rng', () => {
   it('is deterministic and in range', () => {
@@ -80,8 +78,8 @@ describe('composer', () => {
     }
   });
   it('is deterministic per seed', () => {
-    const a = makeSong(SECTORS[2].song, 77).bar(3, 3);
-    const b = makeSong(SECTORS[2].song, 77).bar(3, 3);
+    const a = makeSong(STAGES[2].song, 77).bar(3, 3);
+    const b = makeSong(STAGES[2].song, 77).bar(3, 3);
     expect(a.lead).toEqual(b.lead);
   });
 });
@@ -114,45 +112,3 @@ describe('conductor', () => {
   });
 });
 
-describe('upgrades', () => {
-  it('computes stats and respects caps', () => {
-    const s0 = computeStats(SHIPS.echo, {}, DIFFICULTY.normal);
-    expect(s0.streams).toBe(2);
-    expect(s0.maxHp).toBe(5);
-    const s1 = computeStats(SHIPS.echo, { barrel: 3, overclock: 2, hull: 3 }, DIFFICULTY.normal);
-    expect(s1.streams).toBe(5);
-    expect(s1.shotsPerBeat).toBe(8);
-    expect(s1.maxHp).toBe(8);
-  });
-  it('rolls distinct, available offers with an attack option', () => {
-    const rng = new RNG(9);
-    for (let i = 0; i < 200; i++) {
-      const lv = { barrel: 3, beam: rng.int(0, 3) } as const;
-      const offers = rollOffers(rng, { ...lv }, { hp: 5, maxHp: 5, boss: i % 2 === 0 });
-      expect(new Set(offers).size).toBe(offers.length);
-      expect(offers.length).toBe(3);
-      expect(offers).not.toContain('barrel');
-      expect(offers).not.toContain('repair');
-      expect(offers.some((id) => UPGRADE_MAP[id].cat === 'atk')).toBe(true);
-    }
-  });
-  it('describes every upgrade', () => {
-    for (const u of UPGRADES) {
-      const d = describeUp(u.id, {}, SHIPS.echo, DIFFICULTY.normal);
-      expect(typeof d.a).toBe('string');
-    }
-  });
-});
-
-describe('waves', () => {
-  it('builds non-empty, sorted schedules for every sector', () => {
-    for (const s of SECTORS) {
-      for (let wv = 0; wv < 2; wv++) {
-        const plan = buildWave(new RNG(s.index * 7 + wv), s, wv, 1);
-        expect(plan.entries.length).toBeGreaterThan(5);
-        for (let i = 1; i < plan.entries.length; i++) expect(plan.entries[i].at).toBeGreaterThanOrEqual(plan.entries[i - 1].at);
-        for (const e of plan.entries) expect(s.roster).toContain(e.spec.kind);
-      }
-    }
-  });
-});
