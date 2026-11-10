@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>PULSAR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="description" content="PULSAR — 음악이 곧 탄막이 되는 리듬 슈팅 로그라이트. 모든 음악과 그래픽이 실시간으로 생성됩니다." />
+    <meta name="theme-color" content="#06051a" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="PULSAR" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="./icons/icon.svg" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans+KR:wght@400;600&display=swap"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="stage" aria-label="PULSAR"></canvas>
+      <div id="ui"></div>
+    </div>
+    <noscript>PULSAR를 플레이하려면 JavaScript가 필요합니다.</noscript>
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>
